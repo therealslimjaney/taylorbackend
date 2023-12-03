@@ -1,40 +1,36 @@
 package com.example.demo;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Comparator;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-import org.springframework.data.repository.PagingAndSortingRepository;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.Optional;
+
+/**
+ * Controller class handling HTTP requests related to user records.
+ */
 @RestController
 public class UserRecordController {
+
     private final UserRecordRepository userRecordRepository;
 
+    /**
+     * Constructor for the UserRecordController.
+     *
+     * @param userRecordRepository The repository for user records.
+     */
     @Autowired
     public UserRecordController(UserRecordRepository userRecordRepository) {
         this.userRecordRepository = userRecordRepository;
     }
 
+    /**
+     * Updates the user's nickname based on the Google ID.
+     *
+     * @param userGoogleId The Google ID of the user.
+     * @param userHandle   The new user handle or nickname.
+     */
     @PostMapping("/updateUserNickname")
     @CrossOrigin(origins = "*")
     public void updateUserNickname(@RequestParam String userGoogleId, @RequestParam String userHandle) {
@@ -44,8 +40,12 @@ public class UserRecordController {
         });
     }
 
-
-
+    /**
+     * Retrieves the user's nickname based on the Google ID.
+     *
+     * @param userGoogleId The Google ID of the user.
+     * @return ResponseEntity containing the user's nickname or not found.
+     */
     @GetMapping("/getUserNickname")
     @CrossOrigin(origins = "*")
     public ResponseEntity<String> getUserNickname(@RequestParam String userGoogleId) {
@@ -59,12 +59,23 @@ public class UserRecordController {
         }
     }
 
+    /**
+     * Saves a new user record.
+     *
+     * @param userRecord The user record to be saved.
+     */
     @PostMapping("/saveUserRecord")
     @CrossOrigin(origins = "*")
     public void saveUserRecord(@RequestBody UserRecord userRecord) {
         this.userRecordRepository.save(userRecord);
     }
 
+    /**
+     * Retrieves a user record based on the Google ID.
+     *
+     * @param userGoogleId The Google ID of the user.
+     * @return Optional containing the user record, or empty if not found.
+     */
     @GetMapping("/findByUserGoogleId")
     @CrossOrigin(origins = "*")
     @ResponseBody
